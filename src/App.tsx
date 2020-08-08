@@ -1,19 +1,30 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import './App.css'
+import { Button } from './components/UI/Button/Button'
 
-const App = () => {
-    return (
-        <div className="App">
-            <header className="App-header">
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-                    Learn React
-                </a>
-            </header>
-        </div>
-    )
+const App: FunctionComponent = () => {
+
+	const handleGenChartClick = () => {
+		console.log('clicked')
+	}
+
+	return (
+		<>
+			<header className="title">
+				<h1>Gabriel's Challenge</h1>
+			</header>
+
+			{/* TODO: code section goes here */}
+
+			{/* TODO: chart section goes here */}
+
+			<footer>
+				<Button
+					content={"GENERATE CHART"}
+					onClick={handleGenChartClick}
+				/>
+			</footer>
+		</>
+	)
 }
-
-export default App
+export default App;
