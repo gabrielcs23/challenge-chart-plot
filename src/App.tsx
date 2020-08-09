@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from 'react'
 import './App.css'
+import React, { FunctionComponent } from 'react'
 import { Button } from './components/UI/Button/Button'
+import { InputSection } from './components/InputSection/InputSection'
 
 const App: FunctionComponent = () => {
 
@@ -10,20 +11,24 @@ const App: FunctionComponent = () => {
 
 	return (
 		<>
-			<header className="title">
+			<div className="title">
 				<h1>Gabriel's Challenge</h1>
-			</header>
+			</div>
 
-			{/* TODO: code section goes here */}
+			<div className="input-section">
+				<InputSection />
+			</div>			
 
-			{/* TODO: chart section goes here */}
+			<div className="chart-section">
+				<div> </div>
+			</div>
 
-			<footer>
+			<div className="footer">
 				<Button
 					content={"GENERATE CHART"}
 					onClick={handleGenChartClick}
 				/>
-			</footer>
+			</div>
 		</>
 	)
 }
