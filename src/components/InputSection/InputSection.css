@@ -1,0 +1,61 @@
+.CodeMirror, .ReactCodeMirror {
+    font-family: 'Source Code Pro', monospace;
+    height: 100%;
+}
+
+/* Codemirror theme customization */
+.cm-s-material-palenight.CodeMirror {
+    color: #d2d2d2;
+    background-color: #2e3440;
+}
+
+.cm-s-material-palenight .cm-keyword {
+    color: #fff;
+}
+
+.cm-s-material-palenight .cm-attribute {
+    color: #fff;
+}
+
+.cm-s-material-palenight .cm-property {
+    color: #fff;
+}
+
+.cm-s-material-palenight .cm-string {
+    color: #0EC3D4;
+}
+
+.cm-s-material-palenight .cm-number {
+    color: #B07DDC;
+}
+
+.cm-s-material-palenight .CodeMirror-gutters {
+    background: #60656e;
+    padding-left: 0.7em;
+}
+
+.cm-s-material-palenight .CodeMirror-linenumber {
+    font-size: 0.9em;
+    padding-top: 0.9em;
+    padding-left: .1em;
+    color: #3e434e;
+}
+
+.cm-s-material-palenight .CodeMirror-line {
+    padding-left: 0.9em !important;
+    padding-top: 0.7em !important;
+}
+
+/* CodeMirror scrollbar customization */
+.CodeMirror-simplescroll-horizontal, .CodeMirror-simplescroll-vertical, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+    background: #2e3440;
+}
+
+.CodeMirror-simplescroll-vertical div {
+    position: absolute;
+    background: #60656e;
+    box-sizing: border-box;
+    border: 1px solid #60656e;
+    border-radius: unset;
+    -webkit-border-radius: 100px;
+}
