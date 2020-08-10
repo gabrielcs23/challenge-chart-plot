@@ -1,14 +1,14 @@
+import React, { FunctionComponent, useState } from 'react'
+import { Resizable, Enable } from 're-resizable';
+import { HandleIcon } from '../UI/HandleIcon/HandleIcon';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { EditorConfiguration } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/scroll/simplescrollbars';
 import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/theme/material-palenight.css';
 import './InputSection.css';
-import React, { FunctionComponent, useState } from 'react'
-import { Resizable, Enable } from 're-resizable';
-import CodeMirror from 'react-codemirror';
-import { EditorConfiguration } from 'codemirror';
-import { HandleIcon } from '../UI/HandleIcon/HandleIcon';
 
 export const InputSection: FunctionComponent = () => {
 	const [input, setInput] = useState('');
@@ -53,7 +53,7 @@ export const InputSection: FunctionComponent = () => {
 		>
 			<CodeMirror
 				value={input}
-				onChange={setInput}
+				onChange={(editor, data, value) => setInput(value)}
 				options={codeMirrorOptions}
 			/>
 		</Resizable>
