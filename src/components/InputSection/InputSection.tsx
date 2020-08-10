@@ -8,6 +8,7 @@ import React, { FunctionComponent, useState } from 'react'
 import { Resizable, Enable } from 're-resizable';
 import CodeMirror from 'react-codemirror';
 import { EditorConfiguration } from 'codemirror';
+import { HandleIcon } from '../UI/HandleIcon/HandleIcon';
 
 export const InputSection: FunctionComponent = () => {
 	const [input, setInput] = useState('');
@@ -45,6 +46,10 @@ export const InputSection: FunctionComponent = () => {
 				height: 300
 			}}
 			enable={resizeDirection}
+			// Component that render the handle icon at the bottom
+			handleComponent={{
+				bottom: <HandleIcon />
+			}}
 		>
 			<CodeMirror
 				value={input}

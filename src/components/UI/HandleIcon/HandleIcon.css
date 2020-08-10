@@ -1,0 +1,24 @@
+.handle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.handle-box {
+    border: 1px solid #000;
+    border-radius: 4px;
+    height: 8px;
+    background: black;
+    width: 1.5em;
+}
+
+.handle-line {
+    background-color: #6b6f77;
+    height: 1px;
+    width: 1em;
+    margin: .1em auto;
+}
+
+.handle-line:first-child {
+    margin-top: .15em;
+}
