@@ -1,35 +1,55 @@
 import './App.css'
-import React, { FunctionComponent } from 'react'
+import React, { Component } from 'react'
 import { Button } from './components/UI/Button/Button'
 import { InputSection } from './components/InputSection/InputSection'
 
-const App: FunctionComponent = () => {
+type AppState = {
+	rawInput: string;
+	genChartDisabled: boolean
+}
 
-	const handleGenChartClick = () => {
-		console.log('clicked')
+export default class App extends Component<{}, AppState>  {
+
+	constructor(props: {}) {
+		super(props);
+		this.state = {
+			rawInput: '',
+			genChartDisabled: false
+		}
 	}
 
-	return (
-		<>
-			<div className="title">
-				<h1>Gabriel's Challenge</h1>
-			</div>
+	onChangeRawInput(rawInput: string) {
+		this.setState({rawInput: rawInput});
+	}
 
-			<div className="input-section">
-				<InputSection />
-			</div>			
+	handleGenChartClick() {
+		this.setState({genChartDisabled: true})
+	}
 
-			<div className="chart-section">
-				<div> </div>
-			</div>
-
-			<div className="footer">
-				<Button
-					content={"GENERATE CHART"}
-					onClick={handleGenChartClick}
-				/>
-			</div>
-		</>
-	)
+	render() {
+		return (
+			<>
+				<div className="title">
+					<h1>Gabriel's Challenge</h1>
+				</div>
+	
+				<div className="input-section">
+					<InputSection onChange={(value: string) => this.onChangeRawInput(value)} />
+				</div>			
+	
+				<div className="chart-section">
+					<div> </div>
+				</div>
+	
+				<div className="footer">
+					<Button
+						content={"GENERATE CHART"}
+						disabled={this.state.genChartDisabled}
+						onClick={() => this.handleGenChartClick()}
+					/>
+				</div>
+			</>
+		)
+	}
+	
 }
-export default App;

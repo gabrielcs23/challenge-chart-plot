@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent } from 'react'
 import { Resizable, Enable } from 're-resizable';
 import { HandleIcon } from '../UI/HandleIcon/HandleIcon';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
@@ -10,8 +10,11 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/theme/material-palenight.css';
 import './InputSection.css';
 
-export const InputSection: FunctionComponent = () => {
-	const [input, setInput] = useState('');
+type InputSectionProps = {
+	onChange: Function;
+}
+
+export const InputSection: FunctionComponent<InputSectionProps> = ({ onChange }) => {
 
 	// Sets the resizable permission to only resize on the bottom direction
 	const resizeDirection: Enable = {
@@ -52,8 +55,7 @@ export const InputSection: FunctionComponent = () => {
 			}}
 		>
 			<CodeMirror
-				value={input}
-				onChange={(editor, data, value) => setInput(value)}
+				onChange={(editor, data, value) => onChange(value)}
 				options={codeMirrorOptions}
 			/>
 		</Resizable>
