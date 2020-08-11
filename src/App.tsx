@@ -2,6 +2,7 @@ import './App.css'
 import React, { Component } from 'react'
 import { Button } from './components/UI/Button/Button'
 import { InputSection } from './components/InputSection/InputSection'
+import { InputParser } from './utils/InputParser'
 
 type AppState = {
 	rawInput: string;
@@ -24,6 +25,10 @@ export default class App extends Component<{}, AppState>  {
 
 	handleGenChartClick() {
 		this.setState({genChartDisabled: true})
+		InputParser.parse(this.state.rawInput);
+
+		// after chart is plotted
+		this.setState({genChartDisabled: false})
 	}
 
 	render() {
