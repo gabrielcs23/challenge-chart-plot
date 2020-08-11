@@ -16,10 +16,10 @@
     border-color: #007bff;
 }
 
-.btn:not(.disabled) {
+.btn:not(:disabled) {
     cursor: pointer;
 }
 
-.btn.disabled {
+.btn:disabled {
     opacity: .65;
 }
