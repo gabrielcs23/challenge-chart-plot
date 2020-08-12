@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Button } from './components/UI/Button/Button'
 import { InputSection } from './components/InputSection/InputSection'
 import { InputParser } from './utils/InputParser'
+import { EventsProcessor } from './utils/EventsProcessor'
 
 type AppState = {
 	rawInput: string;
@@ -11,12 +12,15 @@ type AppState = {
 
 export default class App extends Component<{}, AppState>  {
 
+	private eventsProcessor: EventsProcessor
+
 	constructor(props: {}) {
 		super(props);
 		this.state = {
 			rawInput: '',
 			genChartDisabled: false
 		}
+		this.eventsProcessor = new EventsProcessor();
 	}
 
 	onChangeRawInput(rawInput: string) {
@@ -24,11 +28,17 @@ export default class App extends Component<{}, AppState>  {
 	}
 
 	handleGenChartClick() {
-		this.setState({genChartDisabled: true})
-		InputParser.parse(this.state.rawInput);
-
-		// after chart is plotted
-		this.setState({genChartDisabled: false})
+		if (this.state.rawInput === '') {
+			console.warn('Enter input first');
+			return;
+		}
+		this.setState({genChartDisabled: true});
+		const events = InputParser.parse(this.state.rawInput);
+		if (events.length > 0) {
+			this.eventsProcessor.processMultipleEvents(events);
+		}
+		// after data is processed
+		this.setState({genChartDisabled: false});
 	}
 
 	render() {
