@@ -1,5 +1,4 @@
 import { ProcessableEvent } from '../model/ProcessableEvent';
-import { EventData } from '../model/EventData';
 
 /**
  * Responsible for processing events and generate chart series
@@ -26,17 +25,14 @@ export class EventsProcessor {
     /**
      * Processed data.
      * 
-     * The outter most Map keys are a combination of given groupOptions data values.
+     * Map key is a composition of every *groupOption* event value combined with each *selectOption*.
      * 
-     * So if *groupOptions=["os","browser"]*, possibles keys are *\"linux_chrome\"*,
-     * *\"linux_firefox\"* and *\"mac_chrome\"*
+     * So if *groupOptions=["os","browser"]* and *selectOptions=["min_response_time","max_response_time"]*, 
+     * one possible set of keys is:
      * 
-     * Every selectOptions element make a key in the inner Map.
-     * 
-     * So if *selectOptions=["min_response_time","max_response_time"]*, both
-     * *\"min_response_time\"* and *\"max_response_time\"* are keys
+     * *\['Linux Chrome Min Response Time', 'Linux Chrome Max Response Time']*
      */
-    private data: Map<string, Map<string, EventData[]>>;
+    private dataMap: Map<string, number[]>;
 
     constructor() {
         this.status = 'idle';
@@ -44,7 +40,7 @@ export class EventsProcessor {
         this.end = 0;
         this.selectOptions = [];
         this.groupOptions = [];
-        this.data = new Map();
+        this.dataMap = new Map();
     }
 
     private get isStatusIdle(): boolean {
@@ -76,7 +72,7 @@ export class EventsProcessor {
                 this.processData(event);
                 break;
             case 'stop':
-                this.processStop(event);
+                this.processStop();
                 break;
             default:
                 console.warn('Unknown event. Ignoring')
@@ -101,8 +97,8 @@ export class EventsProcessor {
         this.selectOptions = event.select;
         this.groupOptions = event.group;
         // makes sure that start will process only new data
-        if (this.data.size > 0) {
-            this.data = new Map();
+        if (this.dataMap.size > 0) {
+            this.dataMap = new Map();
         }
     }
 
@@ -132,30 +128,27 @@ export class EventsProcessor {
         if (event.timestamp < this.begin || event.timestamp > this.end) {
             return;
         }
+        // groupKey is the composition of every event group value
         const groupKey = this.getAndComposeGroupKey(event);
-
-        // navigate by group
-        let selectMap = this.data.get(groupKey);
-        if (!selectMap) {
-            selectMap = new Map();
-            this.data.set(groupKey, selectMap);
-        }
-
-        for (const select of this.selectOptions) {
-            let eventSelectValue: EventData = {timestamp: event.timestamp, value: event[select]};
-            // navigate by select
-            const selectData = selectMap.get(select);
-            if (!selectData) {
-                selectMap.set(select, [eventSelectValue]);
+        this.selectOptions.forEach(s => {
+            // groupKey + selectOption = dataMap key
+            const tagKey = groupKey + this.formatSelectOption(s);
+            const data = this.dataMap.get(tagKey);
+            if (data) {
+                data.push(event[s]);
             } else {
-                selectData.push(eventSelectValue)
+                this.dataMap.set(tagKey, [event[s]]);
             }
-        }
+        });
+    }
+
+    private processStop() {
+        this.status = 'idle';
     }
 
     /**
      * Gets event group values and compose group key
-     * @see this.data definition
+     * @see this.dataMap definition
      * @param event
      * @returns composed group key
      */
@@ -163,25 +156,27 @@ export class EventsProcessor {
         let groupKey = '';
         this.groupOptions.forEach(g => {
             if (groupKey !== '') {
-                groupKey += '_';
+                groupKey += ' ';
             }
-            groupKey += event[g];
+            groupKey += this.capitalize(event[g]);
         });
         return groupKey;
     }
 
-    private processStop(event: ProcessableEvent) {
-        this.status = 'idle';
+    /**
+     * Format *selectOption* to make a key in *this.dataMap*
+     * 
+     * e.g. 'min_response_time' -> ' Min Response Time'
+     * @param source single selectOption
+     */
+    private formatSelectOption(source: string): string {
+        const words = source.split('_');
+        let r = '';
+        words.forEach(w => r += ` ${this.capitalize(w)}`);
+        return r;
     }
 
-    private formatKeyString(target: string, source: string): string {
-        if (target !== '') {
-            target += ' ';
-        }
-        return target + this.capitalizeString(source);
-    }
-
-    private capitalizeString(target: string): string {
+    private capitalize(target: string): string {
         return target[0].toUpperCase() + target.slice(1, target.length);
     }
 
