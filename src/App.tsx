@@ -4,10 +4,12 @@ import { Button } from './components/UI/Button/Button'
 import { InputSection } from './components/InputSection/InputSection'
 import { InputParser } from './utils/InputParser'
 import { EventsProcessor } from './utils/EventsProcessor'
+import { ChartSection } from './components/ChartSection/ChartSection'
 
 type AppState = {
 	rawInput: string;
-	genChartDisabled: boolean
+	chartSeries: Highcharts.LineChartSeriesOptions[];
+	genChartDisabled: boolean;
 }
 
 export default class App extends Component<{}, AppState>  {
@@ -18,6 +20,7 @@ export default class App extends Component<{}, AppState>  {
 		super(props);
 		this.state = {
 			rawInput: '',
+			chartSeries: [],
 			genChartDisabled: false
 		}
 		this.eventsProcessor = new EventsProcessor();
@@ -37,8 +40,9 @@ export default class App extends Component<{}, AppState>  {
 		if (events.length > 0) {
 			this.eventsProcessor.processMultipleEvents(events);
 		}
+		const chartSeries = this.eventsProcessor.getChartSeries();
 		// after data is processed
-		this.setState({genChartDisabled: false});
+		this.setState({chartSeries, genChartDisabled: false});
 	}
 
 	render() {
@@ -53,7 +57,7 @@ export default class App extends Component<{}, AppState>  {
 				</div>			
 	
 				<div className="chart-section">
-					<div> </div>
+					<ChartSection chartSeries={this.state.chartSeries.slice()} />
 				</div>
 	
 				<div className="footer">

@@ -25,6 +25,8 @@ export class EventsProcessor {
     /**
      * Processed data.
      * 
+     * Value is an array of *\[timestamp, value]*.
+     * 
      * Map key is a composition of every *groupOption* event value combined with each *selectOption*.
      * 
      * So if *groupOptions=["os","browser"]* and *selectOptions=["min_response_time","max_response_time"]*, 
@@ -32,7 +34,7 @@ export class EventsProcessor {
      * 
      * *\['Linux Chrome Min Response Time', 'Linux Chrome Max Response Time']*
      */
-    private dataMap: Map<string, number[]>;
+    private dataMap: Map<string, Array<[number, number]>>;
 
     constructor() {
         this.status = 'idle';
@@ -135,9 +137,9 @@ export class EventsProcessor {
             const tagKey = groupKey + this.formatSelectOption(s);
             const data = this.dataMap.get(tagKey);
             if (data) {
-                data.push(event[s]);
+                data.push([event.timestamp,event[s]]);
             } else {
-                this.dataMap.set(tagKey, [event[s]]);
+                this.dataMap.set(tagKey, [[event.timestamp, event[s]]]);
             }
         });
     }
@@ -180,11 +182,18 @@ export class EventsProcessor {
         return target[0].toUpperCase() + target.slice(1, target.length);
     }
 
-    /**
-     * TODO
-     */
-    public getChartSeries() {
-
+    public getChartSeries(): Highcharts.LineChartSeriesOptions[] {
+        if (this.dataMap.size > 1) {
+            const chartSeries: Highcharts.LineChartSeriesOptions[] = [];
+            for (const entry of this.dataMap) {
+                let lineSeries: Highcharts.LineChartSeriesOptions = {};
+                lineSeries.name = entry[0];
+                lineSeries.data = entry[1];
+                chartSeries.push(lineSeries);
+            }
+            return chartSeries;
+        }
+        return [];
     }
 
 }
