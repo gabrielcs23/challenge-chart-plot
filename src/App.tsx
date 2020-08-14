@@ -57,7 +57,7 @@ export default class App extends Component<{}, AppState>  {
 				</div>			
 	
 				<div className="chart-section">
-					<ChartSection chartSeries={this.state.chartSeries.slice()} />
+					<ChartSection chartSeries={this.state.chartSeries} />
 				</div>
 	
 				<div className="footer">
