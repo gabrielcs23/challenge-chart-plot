@@ -1,4 +1,5 @@
 import { ProcessableEvent } from '../model/ProcessableEvent';
+import swal from 'sweetalert';
 
 /**
  * Responsible for processing events and generate chart series
@@ -77,7 +78,7 @@ export class EventsProcessor {
                 this.processStop();
                 break;
             default:
-                console.warn('Unknown event. Ignoring')
+                swal('Unknown', `Ignoring '${type}' event`, 'error');
                 break;
         }
     }
@@ -92,7 +93,7 @@ export class EventsProcessor {
 
     private processStart(event: ProcessableEvent) {
         if (!this.isStatusIdle) {
-            console.error(`New 'start' before 'stop' event`);
+            swal('Error', `New 'start' before 'stop' event`, 'error');
             return;
         }
         this.status = 'started';
@@ -106,24 +107,21 @@ export class EventsProcessor {
 
     private processSpan(event: ProcessableEvent) {
         if (this.isStatusIdle) {
-            console.error(`Can't process 'span' before 'start' event`);
+            swal('Error', `Can't process 'span' before 'start' event`, 'error');
             return;
         }
         this.begin = event.begin;
         this.end = event.end;
-        if (this.isStatusFetching) {
-            console.warn(`Updated boundaries`);
-        }
         this.status = 'fetching';
     }
 
     private processData(event: ProcessableEvent) {
         if (this.isStatusIdle) {
-            console.error(`Can't process 'data' before 'start' event`);
+            swal('Error', `Can't process 'data' before 'start' event`, 'error');
             return;
         }
         if (this.isStatusStarted) {
-            console.error(`Can't process 'data' before 'span' event`);
+            swal('Error', `Can't process 'data' before 'span' event`, 'error');
             return;
         }
         // check range
