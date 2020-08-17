@@ -186,4 +186,8 @@ export class EventsProcessor {
         return [];
     }
 
+    public getRange(): { begin: number, end: number } {
+        return { begin: this.begin, end: this.end };
+    }
+
 }

@@ -23,13 +23,24 @@
 		"react-highcharts": "^16.1.0",
 		"react-scripts": "^3.4.3",
 		"sweetalert": "^2.1.2",
+		"ts-jest": "^26.2.0",
 		"typescript": "^3.9.7"
 	},
 	"scripts": {
 		"start": "tsc && react-scripts start",
 		"build": "tsc && react-scripts build",
-		"test": "tsc && react-scripts test",
+		"test": "tsc && jest",
 		"eject": "tsc && react-scripts eject"
+	},
+	"jest": {
+		"transform": {
+			"^.+\\.ts$": "ts-jest"
+		},
+		"testRegex": "\\.test\\.ts",
+		"moduleFileExtensions": [
+			"ts",
+			"js"
+		]
 	},
 	"eslintConfig": {
 		"extends": "react-app"
