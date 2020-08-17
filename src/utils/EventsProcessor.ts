@@ -1,5 +1,5 @@
 import { ProcessableEvent } from '../model/ProcessableEvent';
-import swal from 'sweetalert';
+import { EventsProcessorException as Exception } from '../model/exception/EventsProcessorException';
 
 /**
  * Responsible for processing events and generate chart series
@@ -78,8 +78,7 @@ export class EventsProcessor {
                 this.processStop();
                 break;
             default:
-                swal('Unknown', `Ignoring '${type}' event`, 'error');
-                break;
+                throw new Exception(`Unknown event`, `Ignoring '${type}'`);
         }
     }
 
@@ -92,10 +91,6 @@ export class EventsProcessor {
     }
 
     private processStart(event: ProcessableEvent) {
-        if (!this.isStatusIdle) {
-            swal('Error', `New 'start' before 'stop' event`, 'error');
-            return;
-        }
         this.status = 'started';
         this.selectOptions = event.select;
         this.groupOptions = event.group;
@@ -107,8 +102,7 @@ export class EventsProcessor {
 
     private processSpan(event: ProcessableEvent) {
         if (this.isStatusIdle) {
-            swal('Error', `Can't process 'span' before 'start' event`, 'error');
-            return;
+            throw new Exception('Error', `Can't process 'span' before 'start' event`);
         }
         this.begin = event.begin;
         this.end = event.end;
@@ -117,12 +111,10 @@ export class EventsProcessor {
 
     private processData(event: ProcessableEvent) {
         if (this.isStatusIdle) {
-            swal('Error', `Can't process 'data' before 'start' event`, 'error');
-            return;
+            throw new Exception('Error', `Can't process 'data' before 'start' event`);
         }
         if (this.isStatusStarted) {
-            swal('Error', `Can't process 'data' before 'span' event`, 'error');
-            return;
+            throw new Exception('Error', `Can't process 'data' before 'span' event`);
         }
         // check range
         if (event.timestamp < this.begin || event.timestamp > this.end) {

@@ -1,10 +1,11 @@
-import './App.css'
-import React, { Component } from 'react'
-import { Button } from './components/UI/Button/Button'
-import { InputSection } from './components/InputSection/InputSection'
-import { InputParser } from './utils/InputParser'
-import { EventsProcessor } from './utils/EventsProcessor'
-import { ChartSection } from './components/ChartSection/ChartSection'
+import './App.css';
+import React, { Component } from 'react';
+import { Button } from './components/UI/Button/Button';
+import { InputSection } from './components/InputSection/InputSection';
+import { InputParser } from './utils/InputParser';
+import { EventsProcessor } from './utils/EventsProcessor';
+import { ChartSection } from './components/ChartSection/ChartSection';
+import swal from 'sweetalert';
 
 type AppState = {
 	rawInput: string;
@@ -38,7 +39,11 @@ export default class App extends Component<{}, AppState>  {
 		this.setState({genChartDisabled: true});
 		const events = InputParser.parse(this.state.rawInput);
 		if (events.length > 0) {
-			this.eventsProcessor.processMultipleEvents(events);
+			try {
+				this.eventsProcessor.processMultipleEvents(events);
+			} catch (error) {
+				swal(error.title, error.body, 'error');
+			}
 		}
 		const chartSeries = this.eventsProcessor.getChartSeries();
 		// after data is processed
