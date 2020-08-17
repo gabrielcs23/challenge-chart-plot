@@ -1,6 +1,8 @@
 # Gabriel's Chart Plot solution
 
-This is my solution to the [Intelie's challenge-chart-plot](https://github.com/intelie/challenge-chart-plot)
+This is my solution to Intelie's [challenge-chart-plot](https://github.com/intelie/challenge-chart-plot)
+
+Live [demo](https://gabrielcs-chart-plot.herokuapp.com/)
 
 ## Getting Started
 
